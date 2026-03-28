@@ -1,0 +1,29 @@
+name: Weekly Backtest
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # Every Monday at 06:00 UTC
+  workflow_dispatch:      # Allow manual trigger
+
+jobs:
+  backtest:
+    name: Run Weekly Backtest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: pip install -e ".[dev]" lightgbm xgboost hmmlearn scipy cvxpy yfinance
+      - name: Run vectorized backtest
+        run: python -m src.backtesting.backtest_engine --config configs/backtest_config.yaml
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+      - name: Upload backtest results
+        uses: actions/upload-artifact@v4
+        with:
+          name: backtest-results-${{ github.run_id }}
+          path: outputs/
+          retention-days: 30

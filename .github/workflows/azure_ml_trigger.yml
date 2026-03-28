@@ -1,0 +1,31 @@
+name: Azure ML Pipeline Trigger
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  trigger-azure-ml:
+    name: Trigger Azure ML Training Pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install Azure ML SDK
+        run: pip install azure-ai-ml azure-identity pyyaml
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        continue-on-error: true  # Skip gracefully if credentials not configured
+      - name: Trigger Azure ML Pipeline
+        run: python infrastructure/azure_ml_pipeline.py --config configs/azure_config.yaml
+        env:
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RESOURCE_GROUP: ml-alpha-lab-rg
+          AZURE_WORKSPACE_NAME: ml-alpha-lab-ws
+        continue-on-error: true  # Don't fail CI if Azure credentials absent
