@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+
+# Environment
+.env
+.env.local
+.env.*
+venv/
+.venv/
+env/
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+*.egg
+MANIFEST
+
+# Testing & coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ML experiment tracking
+mlruns/
+mlartifacts/
+
+# Output directories
+outputs/
+artifacts/
+
+# Data (raw and processed, but keep directory structure)
+data/raw/
+data/processed/
+
+# Model artifacts
+*.pkl
+*.joblib
+*.pt
+*.pth
+*.onnx
+*.h5
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node (in case of any JS tooling)
+node_modules/
+
+# Terraform state
+*.tfstate
+*.tfstate.*
+.terraform/

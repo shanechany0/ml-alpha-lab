@@ -1,0 +1,83 @@
+# Backtesting Configuration
+universe:
+  tickers:
+    # Technology / Growth
+    - AAPL
+    - MSFT
+    - GOOGL
+    - AMZN
+    - META
+    - NVDA
+    - TSLA
+    - BRK-B
+    - JPM
+    - V
+    # Financials / Consumer
+    - MA
+    - UNH
+    - JNJ
+    - PG
+    - HD
+    - BAC
+    - XOM
+    - CVX
+    - ABBV
+    - LLY
+    # Technology / Industrials
+    - AVGO
+    - COST
+    - MRK
+    - TMO
+    - CSCO
+    - ACN
+    - DHR
+    - ABT
+    - CRM
+    - NFLX
+    # Semiconductors / Industrials
+    - AMD
+    - INTC
+    - QCOM
+    - TXN
+    - HON
+    - UPS
+    - CAT
+    - DE
+    - BA
+    - GE
+    # Healthcare
+    - PFE
+    - BMY
+    - AMGN
+    - GILD
+    - REGN
+    - VRTX
+    - SYK
+    - MDT
+    - ELV
+    - CI
+  start_date: "2015-01-01"
+  end_date: "2024-01-01"
+
+backtest:
+  initial_capital: 1000000
+  commission: 0.001
+  slippage: 0.0005
+  max_position_size: 0.05
+  rebalance_frequency: weekly
+  walk_forward:
+    train_window: 252
+    test_window: 63
+    n_splits: 12
+    purge_gap: 5
+
+performance:
+  risk_free_rate: 0.05
+  annualization_factor: 252
+  benchmark: SPY
+
+transaction_costs:
+  spread_bps: 5
+  commission_bps: 10
+  market_impact_coefficient: 0.1
+  daily_volume_limit: 0.05

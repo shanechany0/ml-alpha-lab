@@ -1,0 +1,63 @@
+# Model Configuration
+random_seed: 42
+test_size: 0.2
+validation_size: 0.2
+
+lightgbm:
+  n_estimators: 1000
+  learning_rate: 0.01
+  num_leaves: 63
+  max_depth: -1
+  min_child_samples: 20
+  subsample: 0.8
+  colsample_bytree: 0.8
+  reg_alpha: 0.1
+  reg_lambda: 0.1
+  early_stopping_rounds: 50
+  verbose: -1
+
+xgboost:
+  n_estimators: 1000
+  learning_rate: 0.01
+  max_depth: 6
+  min_child_weight: 5
+  subsample: 0.8
+  colsample_bytree: 0.8
+  reg_alpha: 0.1
+  reg_lambda: 1.0
+  early_stopping_rounds: 50
+  eval_metric: rmse
+
+lstm:
+  hidden_size: 128
+  num_layers: 2
+  dropout: 0.3
+  sequence_length: 60
+  batch_size: 64
+  learning_rate: 0.001
+  epochs: 100
+  patience: 10
+
+transformer:
+  d_model: 64
+  nhead: 4
+  num_encoder_layers: 3
+  dim_feedforward: 256
+  dropout: 0.1
+  sequence_length: 60
+  batch_size: 64
+  learning_rate: 0.0001
+  epochs: 100
+  patience: 10
+
+rl_agent:
+  policy: MlpPolicy
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.01
+  total_timesteps: 100000
