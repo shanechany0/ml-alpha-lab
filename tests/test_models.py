@@ -1,9 +1,10 @@
 """Tests for ML models."""
 
+from unittest.mock import patch
+
 import numpy as np
-import pandas as pd
 import pytest
-from unittest.mock import MagicMock, patch
+
 from src.models.lightgbm_model import LightGBMModel
 from src.models.xgboost_model import XGBoostModel
 

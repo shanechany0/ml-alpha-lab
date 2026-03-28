@@ -1,11 +1,12 @@
 """Tests for portfolio optimization modules."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
+
 from src.portfolio.mean_variance import MeanVarianceOptimizer
-from src.portfolio.risk_parity import RiskParityOptimizer
 from src.portfolio.risk_controls import RiskController
+from src.portfolio.risk_parity import RiskParityOptimizer
 
 
 @pytest.fixture

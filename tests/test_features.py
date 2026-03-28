@@ -1,12 +1,13 @@
 """Tests for feature engineering modules."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
-from src.features.technical import TechnicalFeatures
-from src.features.statistical import StatisticalFeatures
+
 from src.features.cross_sectional import CrossSectionalFeatures
 from src.features.feature_pipeline import FeaturePipeline
+from src.features.statistical import StatisticalFeatures
+from src.features.technical import TechnicalFeatures
 
 
 @pytest.fixture

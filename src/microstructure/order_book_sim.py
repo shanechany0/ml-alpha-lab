@@ -5,7 +5,6 @@ from __future__ import annotations
 import uuid
 from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Any
 
 import pandas as pd
 

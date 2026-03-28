@@ -133,13 +133,16 @@ class SignalEvaluator:
             signals: Wide signal DataFrame.
 
         Returns:
-            Dictionary mapping signal column name → average daily turnover.
+            Dictionary mapping signal column name → average daily turnover,
+            plus a ``'mean_turnover'`` key with the cross-signal average.
         """
         result: dict[str, float] = {}
         for col in signals.columns:
             ranked = signals[col].rank(pct=True)
             daily_change = ranked.diff().abs()
             result[col] = float(daily_change.mean())
+        if result:
+            result["mean_turnover"] = float(sum(result.values()) / len(result))
         logger.info("Turnover analysis: %s", result)
         return result
 

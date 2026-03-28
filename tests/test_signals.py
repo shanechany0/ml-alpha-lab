@@ -1,11 +1,12 @@
 """Tests for alpha signal generation and evaluation."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
+
 from src.signals.alpha_signals import AlphaSignals
-from src.signals.signal_evaluation import SignalEvaluator
 from src.signals.signal_combination import SignalCombiner
+from src.signals.signal_evaluation import SignalEvaluator
 
 
 @pytest.fixture

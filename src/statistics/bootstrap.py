@@ -171,12 +171,6 @@ class Bootstrap:
                     r = r.iloc[: len(s)]
                 return float(s.corr(r, method="spearman"))
 
-            combined = pd.concat(
-                [aligned.iloc[:, 0].reset_index(drop=True),
-                 aligned.iloc[:, 1].reset_index(drop=True)],
-                axis=1,
-            ).stack().reset_index(drop=True)
-
             raw_ic = float(
                 aligned.iloc[:, 0].corr(aligned.iloc[:, 1], method="spearman")
             )

@@ -5,7 +5,6 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-from scipy.stats import mstats
 
 logger = logging.getLogger(__name__)
 
@@ -127,8 +126,11 @@ class DataCleaner:
         logger.debug("Winsorizing with limits=%s", limits)
         numeric_cols = df.select_dtypes(include=[np.number]).columns
         result = df.copy()
+        lower_q, upper_q = limits[0], 1.0 - limits[1]
         for col in numeric_cols:
-            result[col] = mstats.winsorize(df[col].values, limits=limits)
+            lo = df[col].quantile(lower_q)
+            hi = df[col].quantile(upper_q)
+            result[col] = df[col].clip(lower=lo, upper=hi)
         return result
 
     def adjust_for_splits(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -216,4 +218,4 @@ class DataCleaner:
             raise ValueError(
                 f"Unknown method '{method}'. Choose from 'log' or 'simple'."
             )
-        return returns
+        return returns.dropna()

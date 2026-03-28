@@ -27,6 +27,8 @@ class FeaturePipeline:
         statistical: StatisticalFeatures instance.
         cross_sectional: CrossSectionalFeatures instance.
         _feature_names: Cached list of feature column names after fitting.
+        _norm_mean: Column means stored during fit_transform for reuse in transform.
+        _norm_std: Column stds stored during fit_transform for reuse in transform.
     """
 
     def __init__(self, config_path: str | None = None) -> None:
@@ -54,6 +56,8 @@ class FeaturePipeline:
         self.statistical = StatisticalFeatures(feat_cfg.get("statistical"))
         self.cross_sectional = CrossSectionalFeatures(feat_cfg.get("cross_sectional"))
         self._feature_names: list[str] = []
+        self._norm_mean: pd.Series | None = None
+        self._norm_std: pd.Series | None = None
 
     def build_features(
         self,
@@ -149,9 +153,10 @@ class FeaturePipeline:
             ValueError: If an unknown method is specified.
         """
         if method == "zscore":
-            mean = features.mean()
-            std = features.std().replace(0, 1)
-            return (features - mean) / std
+            if self._norm_mean is None:
+                self._norm_mean = features.mean()
+                self._norm_std = features.std().replace(0, 1)
+            return (features - self._norm_mean) / self._norm_std
         elif method == "minmax":
             min_ = features.min()
             max_ = features.max()
@@ -175,6 +180,10 @@ class FeaturePipeline:
     def fit_transform(self, prices: pd.DataFrame) -> pd.DataFrame:
         """Compute, shift, clean, and normalise features in one call.
 
+        Stores normalisation parameters so that subsequent calls to
+        ``transform`` use the same statistics (preventing look-ahead bias
+        from re-fitting on new data).
+
         Args:
             prices: Wide DataFrame of close prices.
 
@@ -182,6 +191,9 @@ class FeaturePipeline:
             Fully processed feature DataFrame ready for model training.
         """
         logger.info("Running fit_transform pipeline.")
+        # Reset stored normalisation parameters so they are re-fitted on this data.
+        self._norm_mean = None
+        self._norm_std = None
         features = self.build_features(prices)
         features = self.remove_lookahead_bias(features)
         features = self.handle_missing(features)
@@ -189,11 +201,10 @@ class FeaturePipeline:
         return features
 
     def transform(self, prices: pd.DataFrame) -> pd.DataFrame:
-        """Transform new prices using the same steps as fit_transform.
+        """Transform new prices using normalisation parameters from fit_transform.
 
-        Identical to ``fit_transform`` for stateless normalisation. For
-        production use, normalisation parameters should be stored from the
-        training set and applied here.
+        Uses the mean and std stored during ``fit_transform`` to avoid
+        look-ahead bias when processing new/extended data.
 
         Args:
             prices: Wide DataFrame of close prices.
@@ -201,4 +212,9 @@ class FeaturePipeline:
         Returns:
             Fully processed feature DataFrame.
         """
-        return self.fit_transform(prices)
+        logger.info("Running transform pipeline.")
+        features = self.build_features(prices)
+        features = self.remove_lookahead_bias(features)
+        features = self.handle_missing(features)
+        features = self.normalize_features(features)
+        return features

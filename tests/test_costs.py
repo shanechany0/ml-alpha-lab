@@ -1,10 +1,11 @@
 """Tests for transaction cost models."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
-from src.costs.transaction_costs import TransactionCostModel
+
 from src.costs.market_impact import AlmgrenChrissModel, SquareRootImpactModel
+from src.costs.transaction_costs import TransactionCostModel
 
 
 @pytest.fixture

@@ -1,9 +1,10 @@
 """Tests for data loading, cleaning, and validation."""
 
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 import pytest
-from unittest.mock import patch, MagicMock
+
 from src.data.data_cleaner import DataCleaner
 from src.data.data_validator import DataValidator
 
