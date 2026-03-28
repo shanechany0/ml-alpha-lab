@@ -183,7 +183,6 @@ class RLAgent(BaseModel):
         """
         try:
             from stable_baselines3 import PPO  # noqa: PLC0415
-            from stable_baselines3.common.callbacks import BaseCallback  # noqa: PLC0415
         except ImportError as exc:
             raise ImportError(
                 "stable-baselines3 is required for RLAgent: pip install stable-baselines3"

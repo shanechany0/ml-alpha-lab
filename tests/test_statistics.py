@@ -1,11 +1,12 @@
 """Tests for statistical analysis modules."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
-from src.statistics.hypothesis_testing import HypothesisTester
-from src.statistics.deflated_sharpe import DeflatedSharpeRatio, compute_dsr
+
 from src.statistics.bootstrap import Bootstrap
+from src.statistics.deflated_sharpe import DeflatedSharpeRatio, compute_dsr
+from src.statistics.hypothesis_testing import HypothesisTester
 
 
 @pytest.fixture

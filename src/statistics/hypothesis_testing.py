@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -124,6 +123,7 @@ class HypothesisTester:
         t_stat, p_val = stats.ttest_1samp(r, 0.0)
         return {
             "mean_return": float(r.mean()),
+            "t_stat": float(t_stat),
             "t_statistic": float(t_stat),
             "p_value": float(p_val / 2),  # one-sided
             "significant": bool(t_stat > 0 and p_val / 2 < 0.05),

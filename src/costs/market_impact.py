@@ -101,20 +101,22 @@ class AlmgrenChrissModel:
             n_periods: Number of trading periods.
 
         Returns:
-            Array of remaining inventory at each period (length n_periods + 1).
+            Array of trade sizes at each period (length n_periods), summing to total_shares.
         """
         if n_periods <= 0:
-            return np.array([total_shares, 0.0])
+            return np.array([total_shares])
 
         kappa = np.sqrt(self.gamma / (2 * self.eta)) if self.eta > 0 else 1.0
         t = np.linspace(0, 1, n_periods + 1)
 
         if kappa == 0:
-            trajectory = total_shares * (1 - t)
+            inventory = total_shares * (1 - t)
         else:
-            trajectory = total_shares * np.sinh(kappa * (1 - t)) / np.sinh(kappa)
+            inventory = total_shares * np.sinh(kappa * (1 - t)) / np.sinh(kappa)
 
-        return trajectory
+        # Return trade sizes (inventory decrements) rather than inventory levels
+        trades = inventory[:-1] - inventory[1:]
+        return trades
 
 
 class SquareRootImpactModel:

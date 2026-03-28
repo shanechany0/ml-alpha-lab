@@ -71,7 +71,7 @@ class DataValidator:
             max_missing_pct * 100,
             ok,
         )
-        return ok
+        return bool(ok)
 
     def check_date_continuity(self, df: pd.DataFrame) -> bool:
         """Check that the index has no unexpected gaps in business days.

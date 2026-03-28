@@ -48,6 +48,9 @@ class RiskController:
     ) -> pd.Series:
         """Clip individual asset weights to a maximum and renormalize.
 
+        Uses an iterative water-filling algorithm so that after renormalization
+        all weights are guaranteed to satisfy the cap exactly.
+
         Args:
             weights: Portfolio weights indexed by asset names.
             max_weight: Maximum allowable weight per asset. Defaults to 0.1.
@@ -55,11 +58,30 @@ class RiskController:
         Returns:
             Weight-capped and renormalized portfolio weights.
         """
-        clipped = weights.clip(upper=max_weight)
-        total = clipped.sum()
-        if total > 0:
-            clipped = clipped / total
-        return clipped
+        w = weights.copy().astype(float)
+        total = w.sum()
+        if total <= 0:
+            return w
+        w = w / total  # normalize to sum to 1
+
+        capped = pd.Series(False, index=w.index)
+        for _ in range(len(w) + 1):
+            n_capped = int(capped.sum())
+            free = ~capped
+            free_sum = w[free].sum()
+            if free_sum <= 0:
+                break
+            free_budget = 1.0 - n_capped * max_weight
+            # Renormalized weights for uncapped assets
+            renorm = w[free] / free_sum * free_budget
+            newly_capped = renorm > max_weight
+            if not newly_capped.any():
+                w[free] = renorm
+                break
+            capped[free] = capped[free] | newly_capped
+
+        w[capped] = max_weight
+        return w
 
     def check_drawdown_circuit_breaker(
         self,

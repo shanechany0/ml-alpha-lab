@@ -111,7 +111,7 @@ class StatisticalFeatures:
             s = returns[col]
             for lag in lags:
                 parts[f"{col}_autocorr_lag{lag}"] = s.rolling(window).apply(
-                    lambda x, l=lag: x.autocorr(lag=l) if len(x) > l + 1 else np.nan,
+                    lambda x, lag_=lag: x.autocorr(lag=lag_) if len(x) > lag_ + 1 else np.nan,
                     raw=False,
                 )
         return pd.DataFrame(parts, index=returns.index)
@@ -189,7 +189,7 @@ class StatisticalFeatures:
             hurst = np.polyfit(lags_arr, rs_arr, 1)[0]
             return float(hurst)
 
-        result = series.rolling(window).apply(lambda x: _hurst(x.values), raw=True)
+        result = series.rolling(window).apply(lambda x: _hurst(x), raw=True)
         result.name = f"{series.name}_hurst"
         return result
 

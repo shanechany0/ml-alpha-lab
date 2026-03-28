@@ -1,8 +1,9 @@
 """Tests for backtesting engine and performance metrics."""
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 import pytest
+
 from src.backtesting.performance_metrics import PerformanceMetrics
 from src.backtesting.vectorized_backtest import VectorizedBacktest
 
