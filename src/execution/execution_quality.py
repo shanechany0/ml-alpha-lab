@@ -129,9 +129,6 @@ class ExecutionQualityAnalyzer:
         """
         df = fills.copy()
         if "fill_price" in df.columns and not market_prices.empty:
-            market_prices.iloc[-1]
-            market_prices.iloc[0]
-
             df["pre_trade_drift_bps"] = np.nan
             df["post_trade_drift_bps"] = np.nan
 

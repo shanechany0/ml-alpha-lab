@@ -129,7 +129,6 @@ class DeflatedSharpeRatio:
 
         r_oos = oos_returns.dropna()
         oos_sr = float(r_oos.mean() / (r_oos.std() + 1e-12)) * np.sqrt(252)
-        np.median(is_sharpes)
 
         n_overfit = sum(1 for sr in is_sharpes if sr > oos_sr)
         return float(n_overfit / len(is_sharpes))
