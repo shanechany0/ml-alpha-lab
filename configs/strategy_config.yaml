@@ -1,0 +1,40 @@
+# Strategy Configuration
+strategies:
+  momentum:
+    lookback_periods: [20, 60, 120, 252]
+    signal_threshold: 0.5
+    holding_period: 20
+    universe_filter: top_half_liquidity
+
+  mean_reversion:
+    lookback_period: 20
+    zscore_threshold: 2.0
+    holding_period: 5
+    universe_filter: top_half_liquidity
+
+  ml_ensemble:
+    models: [lightgbm, xgboost, lstm, transformer]
+    combination_method: ic_weighted
+    prediction_horizon: 5
+    retrain_frequency: quarterly
+
+  rl_trading:
+    observation_window: 60
+    reward_type: sharpe_ratio
+    position_sizing: kelly
+
+portfolio:
+  method: mean_variance
+  risk_aversion: 2.0
+  target_volatility: 0.15
+  max_weight: 0.1
+  min_weight: 0.0
+  turnover_penalty: 0.001
+
+risk_controls:
+  max_drawdown_limit: 0.15
+  position_concentration_limit: 0.1
+  sector_exposure_limit: 0.3
+  gross_exposure_limit: 1.0
+  net_exposure_limits: [-0.2, 1.2]
+  var_limit_95: 0.02

@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  ml-alpha-lab:
+    build:
+      context: .
+    volumes:
+      - ./data:/app/data
+      - ./configs:/app/configs
+      - ./outputs:/app/outputs
+    environment:
+      - PYTHONPATH=/app
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mlflow
+    restart: unless-stopped
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
+    command: >
+      mlflow server
+      --host 0.0.0.0
+      --port 5000
+      --default-artifact-root /mlartifacts
+    volumes:
+      - mlflow_data:/mlartifacts
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+volumes:
+  mlflow_data:
